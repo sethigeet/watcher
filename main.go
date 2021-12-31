@@ -2,8 +2,26 @@
 // directory and when any of the files change, it runs the specified command
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+
+	"github.com/sethigeet/watcher/watcher"
+	"github.com/sethigeet/watcher/watcher/cmd"
+)
 
 func main() {
-	fmt.Println("Welcome to watcher!")
+	cmd.Setup()
+
+	exitCode, err := cmd.Parse()
+	if err != nil {
+		cmd.PrintUsage(err)
+		os.Exit(exitCode)
+	}
+
+	err = watcher.Setup()
+	if err != nil {
+		fmt.Printf("An error occurred!\nerror: %s\n", err)
+		return
+	}
 }
