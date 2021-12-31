@@ -20,10 +20,26 @@ watcher --cmd '<cmd>'
 
 #### Directory
 
-The directory that you want watcher to watch for file changes
+The directory that you want watcher to watch for file changes. (default: ".")
 
 ```sh
 watcher --dir '<dir>'
+```
+
+#### Ignore
+
+The files that you want to ignore. It also supports file globbing.
+
+```sh
+watcher --ignore '<files>'
+```
+
+#### Hidden
+
+Whether the hidden files should also be watched for file changes. (default: true)
+
+```sh
+watcher --hidden false
 ```
 
 ## Examples
@@ -38,5 +54,5 @@ watcher --dir '<dir>'
   ```
 - Advanced example:
   ```sh
-  watcher --cmd 'go run .' --dir '~/Projects/watcher'
+  watcher --cmd 'go run .' --dir '~/Projects/watcher' --hidden false
   ```

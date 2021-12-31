@@ -3,7 +3,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"os"
 
 	"github.com/sethigeet/watcher/watcher"
@@ -21,7 +21,6 @@ func main() {
 
 	err = watcher.Setup()
 	if err != nil {
-		fmt.Printf("An error occurred!\nerror: %s\n", err)
-		return
+		log.Fatalf("An error occurred!\nerror: %s", err)
 	}
 }
