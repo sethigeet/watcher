@@ -1,9 +1,6 @@
 package watcher
 
 import (
-	"fmt"
-	"log"
-	"strings"
 	"time"
 
 	"github.com/fsnotify/fsnotify"
@@ -33,7 +30,7 @@ func sendEvents(w *fsnotify.Watcher) {
 			if !ok {
 				return
 			}
-			log.Printf("An error occurred!\nerror: %s\n", err)
+			log.Errorf("An error occurred!\nerror: %s\n", err)
 		}
 	}
 }
@@ -46,12 +43,11 @@ func handleEvents() {
 
 		flushEvents()
 
+		log.Notice("Refreshing...")
 		errorMessage, ok := run()
 		if !ok {
-			log.Printf("Failed running: %s\n", errorMessage)
+			log.Errorf("Failed running: %s\n", errorMessage)
 		}
-
-		fmt.Println(strings.Repeat("-", 20))
 	}
 }
 

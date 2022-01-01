@@ -3,12 +3,15 @@
 package main
 
 import (
-	"log"
 	"os"
+
+	"github.com/op/go-logging"
 
 	"github.com/sethigeet/watcher/watcher"
 	"github.com/sethigeet/watcher/watcher/cmd"
 )
+
+var log = logging.MustGetLogger("main")
 
 func main() {
 	cmd.Setup()
@@ -19,6 +22,9 @@ func main() {
 		os.Exit(exitCode)
 	}
 
+	log.Noticef(`%sStarting watcher...
+                    Press Ctrl+C to quit
+ `, logging.ColorSeqBold(logging.ColorWhite))
 	err = watcher.Setup()
 	if err != nil {
 		log.Fatalf("An error occurred!\nerror: %s", err)

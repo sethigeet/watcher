@@ -60,7 +60,8 @@ func Setup() error {
 	// Block until we receive our signal.
 	<-q
 
-	fmt.Printf("\nDisposing of all the watchers... ")
+	fmt.Printf("\n")
+	log.Warning("Disposing of all the watchers...")
 
 	return nil
 }
