@@ -109,5 +109,5 @@ watcher -l 50000
   ```
 - **Advanced** example:
   ```sh
-  watcher --cmd 'go run .' --dir '~/Projects/watcher' --hidden false -l true
+  watcher --cmd 'go run .' --dir '~/Projects/watcher' --hidden false -l 50000
   ```
