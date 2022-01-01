@@ -4,7 +4,7 @@ Watcher watches all the files present in the directory it is run from of the dir
 
 ## Features
 
-- [ ] Choose which directory to watch for file changes
+- [x] Choose which directory to watch for file changes
 - [ ] Press keys for force refreshing even when file change is not detected
 - [ ] Automatically recognize commands for popular project structure
 
