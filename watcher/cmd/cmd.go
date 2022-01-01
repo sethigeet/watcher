@@ -11,6 +11,7 @@ type ConfigType struct {
 	Command       *string
 	Directory     *string
 	Ignore        *string
+	IgnoreFile    *string
 	Hidden        *bool
 	RunDelay      *time.Duration
 	RunCmdOnStart *bool
@@ -21,7 +22,9 @@ type ConfigType struct {
 	CmdParts []string
 }
 
-var Config ConfigType = ConfigType{}
+var Config ConfigType = ConfigType{
+	ToIgnore: []string{},
+}
 
 // Setup defines all the allowed flags
 func Setup() {
@@ -33,6 +36,7 @@ func Setup() {
 
 	Config.Ignore = flag.String("ignore", "", "A comma separated list of files to not watch for file changes (supports globbing)")
 	flag.StringVar(Config.Ignore, "i", "", "Alias to -ignore")
+	Config.IgnoreFile = flag.String("ignore-file", "", "A file that contains the names/patterns of the files to not watch(syntax: same as gitignore)")
 
 	Config.Hidden = flag.Bool("hidden", true, "Should the hidden files also be watched for file changes")
 
@@ -52,7 +56,9 @@ func Parse() (int, error) {
 	flag.Parse()
 
 	if len(*Config.Command) == 0 {
-		return 64, fmt.Errorf("the command must be specified")
+		if err := applyCmdDefaults(); err != nil {
+			return 64, fmt.Errorf("the command must be specified as it could not be automatically determined")
+		}
 	}
 	Config.CmdParts = strings.Split(*Config.Command, " ")
 
@@ -65,17 +71,18 @@ func Parse() (int, error) {
 		return 66, fmt.Errorf("the directory specified does not exist")
 	}
 
-	if len(*Config.Ignore) > 0 {
-		globsToIgnore := strings.Split(*Config.Ignore, ",")
-		Config.ToIgnore = []string{}
-		for _, glob := range globsToIgnore {
-			matches, err := Glob(glob)
-			if err != nil {
-				return 1, err
-			}
-
-			Config.ToIgnore = append(Config.ToIgnore, matches...)
+	if len(*Config.IgnoreFile) > 0 {
+		exists, _ = Exists(*Config.IgnoreFile)
+		if !exists {
+			return 66, fmt.Errorf("the specified ignore file does not exist")
 		}
+	} else {
+		exists = false
+	}
+
+	err := applyIgnoreDefaults(exists)
+	if err != nil {
+		return 1, err
 	}
 
 	return 0, nil

@@ -40,6 +40,14 @@ The files that you want to ignore. It also supports file globbing.
 watcher --ignore '<files>'
 ```
 
+#### Ignore File
+
+A file that contains the files that you want to ignore. It follows the gitignore file syntax
+
+```sh
+watcher --ignore-file '<file-name>'
+```
+
 #### Hidden
 
 Whether the hidden files should also be watched for file changes. _(default: true)_

@@ -46,7 +46,6 @@ func Setup() error {
 	}
 
 	if *cmd.Config.ListOnStart {
-		// logging.Color
 		log.Infof("%sFiles being watched:%s %s\n", logging.ColorSeqBold(logging.ColorWhite), []byte("\033[0m"), strings.Join(paths, ", "))
 	}
 

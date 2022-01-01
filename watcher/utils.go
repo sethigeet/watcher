@@ -10,7 +10,7 @@ import (
 
 func isIgnored(name string) bool {
 	for _, file := range cmd.Config.ToIgnore {
-		if file == name {
+		if name == file {
 			return true
 		}
 	}

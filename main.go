@@ -24,7 +24,7 @@ func main() {
 
 	log.Noticef(`%sStarting watcher...
                     Press Ctrl+C to quit
- `, logging.ColorSeqBold(logging.ColorWhite))
+ %s`, logging.ColorSeqBold(logging.ColorWhite), []byte("\033[0m"))
 	err = watcher.Setup()
 	if err != nil {
 		log.Fatalf("An error occurred!\nerror: %s", err)
