@@ -25,7 +25,7 @@ func sendEvents(w *fsnotify.Watcher) {
 				}
 			}
 
-			eventsChannel <- ev.String()
+			eventsChan <- ev.String()
 		case err, ok := <-w.Errors:
 			if !ok {
 				return
@@ -37,13 +37,14 @@ func sendEvents(w *fsnotify.Watcher) {
 
 func handleEvents() {
 	for {
-		<-eventsChannel
+		<-eventsChan
+
+		log.Notice("Refreshing...")
 
 		time.Sleep(*cmd.Config.RunDelay)
 
 		flushEvents()
 
-		log.Notice("Refreshing...")
 		run()
 	}
 }
@@ -51,7 +52,7 @@ func handleEvents() {
 func flushEvents() {
 	for {
 		select {
-		case <-eventsChannel:
+		case <-eventsChan:
 			continue
 		default:
 			return

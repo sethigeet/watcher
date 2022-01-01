@@ -2,9 +2,11 @@ package watcher
 
 import (
 	"io/fs"
+	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/mattn/go-tty"
 	"github.com/sethigeet/watcher/watcher/cmd"
 )
 
@@ -43,4 +45,26 @@ func getFilesToWatch() []string {
 	})
 
 	return files
+}
+
+func detectKeys(quitChan chan<- os.Signal, refreshChan chan<- string) {
+	tty, err := tty.Open()
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer tty.Close()
+
+	for {
+		input, err := tty.ReadRune()
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		switch input {
+		case 'q':
+			quitChan <- os.Interrupt
+		case 'r':
+			refreshChan <- *cmd.Config.Directory
+		}
+	}
 }

@@ -9,9 +9,9 @@ Watcher watches all the files present in the directory it is run from of the dir
 - [x] List the files that are being watched
 - [x] Choose whether to run the command on startup
 - [x] Set the maximum number of files that can be watched
-- [x] Supports never ending processes such as dev servers as the cmd
-- [ ] Have a default ignore list
-- [ ] Press keys for force refreshing even when file change is not detected
+- [x] Supports never ending processes such as dev servers as the command
+- [x] Have a default ignore list
+- [x] Press keys for force refreshing even when file change is not detected
 - [ ] Automatically recognize commands for popular project structure
 
 ## Arguments

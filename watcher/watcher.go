@@ -14,12 +14,12 @@ import (
 )
 
 var (
-	eventsChannel chan string
-	watchers      []*fsnotify.Watcher
+	eventsChan chan string
+	watchers   []*fsnotify.Watcher
 )
 
 func init() {
-	eventsChannel = make(chan string, 1000)
+	eventsChan = make(chan string, 1000)
 }
 
 func Setup() error {
@@ -54,18 +54,21 @@ func Setup() error {
 
 	// Start by running the cmd
 	if *cmd.Config.RunCmdOnStart {
-		eventsChannel <- *cmd.Config.Directory
+		eventsChan <- *cmd.Config.Directory
 	}
 
 	// the quit channel
-	q := make(chan os.Signal, 1)
+	quitChan := make(chan os.Signal, 1)
 
 	// accept graceful shutdowns when quit via SIGINT (Ctrl+C)
 	// SIGKILL, SIGQUIT or SIGTERM (Ctrl+/) will not be caught
-	signal.Notify(q, os.Interrupt)
+	signal.Notify(quitChan, os.Interrupt)
+
+	// accept 'q' for quitting and 'r' for force refresh
+	go detectKeys(quitChan, eventsChan)
 
 	// Block until we receive our signal.
-	<-q
+	<-quitChan
 
 	fmt.Printf("\n")
 	log.Warning("Disposing of all the watchers...")

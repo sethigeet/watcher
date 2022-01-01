@@ -22,8 +22,10 @@ func main() {
 		os.Exit(exitCode)
 	}
 
+	// NOTE: The spaces here account for the prefixes applied by the logger so that all the text is aligned
 	log.Noticef(`%sStarting watcher...
-                    Press Ctrl+C to quit
+                    Press Ctrl+C or q to quit
+                    Press r to to force refresh
  %s`, logging.ColorSeqBold(logging.ColorWhite), []byte("\033[0m"))
 	err = watcher.Setup()
 	if err != nil {
