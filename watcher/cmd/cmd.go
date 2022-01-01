@@ -18,6 +18,7 @@ type ConfigType struct {
 	Limit         *uint64
 
 	ToIgnore []string
+	CmdParts []string
 }
 
 var Config ConfigType = ConfigType{}
@@ -53,6 +54,7 @@ func Parse() (int, error) {
 	if len(*Config.Command) == 0 {
 		return 64, fmt.Errorf("the command must be specified")
 	}
+	Config.CmdParts = strings.Split(*Config.Command, " ")
 
 	if len(*Config.Directory) == 0 {
 		return 64, fmt.Errorf("the directory arg must not be empty")

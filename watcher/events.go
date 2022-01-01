@@ -44,10 +44,7 @@ func handleEvents() {
 		flushEvents()
 
 		log.Notice("Refreshing...")
-		errorMessage, ok := run()
-		if !ok {
-			log.Errorf("Failed running: %s\n", errorMessage)
-		}
+		run()
 	}
 }
 
