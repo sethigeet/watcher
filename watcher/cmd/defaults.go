@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -94,5 +95,5 @@ func applyIgnoreDefaults(ignoreFileExists bool) error {
 }
 
 func applyCmdDefaults() error {
-	return nil
+	return fmt.Errorf("error not implemented")
 }
