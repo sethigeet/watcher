@@ -6,9 +6,10 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strings"
 
 	"github.com/fsnotify/fsnotify"
-
+	"github.com/op/go-logging"
 	"github.com/sethigeet/watcher/watcher/cmd"
 )
 
@@ -44,11 +45,18 @@ func Setup() error {
 		}
 	}
 
+	if *cmd.Config.ListOnStart {
+		// logging.Color
+		log.Infof("%sFiles being watched:%s %s\n", logging.ColorSeqBold(logging.ColorWhite), []byte("\033[0m"), strings.Join(paths, ", "))
+	}
+
 	// Close the watcher in the end
 	defer watcher.Close()
 
 	// Start by running the cmd
-	eventsChannel <- *cmd.Config.Directory
+	if *cmd.Config.RunCmdOnStart {
+		eventsChannel <- *cmd.Config.Directory
+	}
 
 	// the quit channel
 	q := make(chan os.Signal, 1)

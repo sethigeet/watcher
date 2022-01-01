@@ -8,18 +8,19 @@ import (
 )
 
 type ConfigType struct {
-	Command   *string
-	Directory *string
-	Ignore    *string
-	Hidden    *bool
+	Command       *string
+	Directory     *string
+	Ignore        *string
+	Hidden        *bool
+	RunDelay      *time.Duration
+	RunCmdOnStart *bool
+	ListOnStart   *bool
+	Limit         *uint64
 
 	ToIgnore []string
-	RunDelay time.Duration
 }
 
-var Config ConfigType = ConfigType{
-	RunDelay: 500 * time.Millisecond,
-}
+var Config ConfigType = ConfigType{}
 
 // Setup defines all the allowed flags
 func Setup() {
@@ -33,7 +34,16 @@ func Setup() {
 	flag.StringVar(Config.Ignore, "i", "", "Alias to -ignore")
 
 	Config.Hidden = flag.Bool("hidden", true, "Should the hidden files also be watched for file changes")
-	flag.BoolVar(Config.Hidden, "h", true, "Alias to -hidden")
+
+	Config.RunDelay = flag.Duration("delay", 500*time.Millisecond, "The amount of time to wait before running the cmd after a file change occurs")
+
+	Config.RunCmdOnStart = flag.Bool("run-cmd-on-start", true, "Should the specified command run on startup")
+	flag.BoolVar(Config.RunCmdOnStart, "r", true, "Alias to -run-cmd-on-start")
+
+	Config.ListOnStart = flag.Bool("list-on-start", false, "Should the files being watched be printed on startup")
+
+	Config.Limit = flag.Uint64("limit", 10000, "The maximum number of files that can be watched")
+	flag.Uint64Var(Config.Limit, "l", 10000, "Alias to -limit")
 }
 
 // Parse parses all the flags defined by the Setup function

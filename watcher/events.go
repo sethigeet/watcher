@@ -39,7 +39,7 @@ func handleEvents() {
 	for {
 		<-eventsChannel
 
-		time.Sleep(cmd.Config.RunDelay)
+		time.Sleep(*cmd.Config.RunDelay)
 
 		flushEvents()
 
