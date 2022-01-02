@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -94,6 +95,77 @@ func applyIgnoreDefaults(ignoreFileExists bool) error {
 	return nil
 }
 
+type defType struct {
+	filename string
+	apply    func() error
+}
+
+var defaults = map[string]defType{
+	"nodejs": {
+		filename: "package.json",
+		apply: func() error {
+			content, err := ioutil.ReadFile("./package.json")
+			if err != nil {
+				return err
+			}
+
+			var jsn map[string]interface{}
+			err = json.Unmarshal(content, &jsn)
+			if err != nil {
+				return err
+			}
+
+			log.Debugf("jsn: %v", jsn)
+
+			if jsn["scripts"] != nil {
+				scripts := (jsn["scripts"]).(map[string]interface{})
+				log.Debugf("scripts: %v", scripts)
+				if scripts["dev"] != nil {
+					*Config.Command = "yarn dev"
+					return nil
+				}
+
+				if scripts["start"] != nil {
+					*Config.Command = "yarn start"
+					return nil
+				}
+			}
+
+			return fmt.Errorf("unable to figure out the default cmd")
+		},
+	},
+
+	"golang": {
+		filename: "go.mod",
+		apply: func() error {
+			*Config.Command = "go run ."
+
+			return nil
+		},
+	},
+
+	"rust (managed by cargo)": {
+		filename: "Cargo.toml",
+		apply: func() error {
+			*Config.Command = "cargo run"
+
+			return nil
+		},
+	},
+}
+
 func applyCmdDefaults() error {
-	return fmt.Errorf("error not implemented")
+	for proj, val := range defaults {
+		exists, err := Exists("./" + val.filename)
+		if err == nil && exists {
+			if val.apply() != nil {
+				return err
+			}
+
+			log.Noticef("Automatically detected the command for project type: %s", proj)
+			return nil
+		}
+	}
+
+	return fmt.Errorf("this project type is not implemented yet")
 }

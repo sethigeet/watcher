@@ -12,7 +12,7 @@ Watcher watches all the files present in the directory it is run from of the dir
 - [x] Supports never ending processes such as dev servers as the command
 - [x] Have a default ignore list
 - [x] Press keys for force refreshing even when file change is not detected
-- [ ] Automatically recognize commands for popular project structure
+- [x] Automatically recognize commands for popular project structure
 
 ## Arguments
 
@@ -105,7 +105,7 @@ watcher -l 50000
   ```
 - **Intermediate** example:
   ```sh
-  watcher --cmd 'go run .' --delay 1s
+  watcher --delay 1s
   ```
 - **Advanced** example:
   ```sh
