@@ -1,6 +1,7 @@
 package watcher
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/fsnotify/fsnotify"
@@ -38,6 +39,10 @@ func sendEvents(w *fsnotify.Watcher) {
 func handleEvents() {
 	for {
 		<-eventsChan
+
+		if *cmd.Config.Clear {
+			fmt.Printf("\x1bc")
+		}
 
 		log.Notice("Refreshing...")
 

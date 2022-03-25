@@ -13,6 +13,7 @@ type ConfigType struct {
 	Ignore        *string
 	IgnoreFile    *string
 	Hidden        *bool
+	Clear         *bool
 	RunDelay      *time.Duration
 	RunCmdOnStart *bool
 	ListOnStart   *bool
@@ -29,7 +30,7 @@ var Config ConfigType = ConfigType{
 // Setup defines all the allowed flags
 func Setup() {
 	Config.Command = flag.String("cmd", "", "The command to run when a file change is observed")
-	flag.StringVar(Config.Command, "c", "", "Alias to -cmd")
+	flag.StringVar(Config.Command, "x", "", "Alias to -cmd")
 
 	Config.Directory = flag.String("dir", ".", "The directory to watch for file changes")
 	flag.StringVar(Config.Directory, "d", ".", "Alias to -dir")
@@ -39,6 +40,9 @@ func Setup() {
 	Config.IgnoreFile = flag.String("ignore-file", "", "A file that contains the names/patterns of the files to not watch(syntax: same as gitignore)")
 
 	Config.Hidden = flag.Bool("hidden", true, "Should the hidden files also be watched for file changes")
+
+	Config.Clear = flag.Bool("clear", false, "Should the hidden files also be watched for file changes")
+	flag.BoolVar(Config.Clear, "c", false, "Alias to -clear")
 
 	Config.RunDelay = flag.Duration("delay", 500*time.Millisecond, "The amount of time to wait before running the cmd after a file change occurs")
 

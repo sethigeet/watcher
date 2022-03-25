@@ -22,6 +22,8 @@ The command you want to run when any file changes
 
 ```sh
 watcher --cmd '<cmd>'
+or
+watcher -x '<cmd>'
 ```
 
 #### Directory
@@ -54,6 +56,16 @@ Whether the hidden files should also be watched for file changes. _(default: tru
 
 ```sh
 watcher --hidden false
+```
+
+#### Clear
+
+Whether to clear the terminal every time the command is rerun due to changed. _(default: true)_
+
+```sh
+watcher -c
+or
+watcher --clear
 ```
 
 #### Delay
@@ -109,5 +121,5 @@ watcher -l 50000
   ```
 - **Advanced** example:
   ```sh
-  watcher --cmd 'go run .' --dir '~/Projects/watcher' --hidden false -l 50000
+  watcher -x 'go run .' --dir '~/Projects/watcher' --hidden false -l 50000
   ```
